@@ -455,3 +455,58 @@ if auto_refresh and st.session_state.view_mode == 'dashboard':
         if refresh_interval >= 60:
             st.cache_data.clear()
         st.session_state.refresh_count = count
+import streamlit as st
+
+def apply_crypto_premium_style():
+    st.markdown(
+        """
+        <style>
+        /* Main Background */
+        .stApp {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url("https://r.jina.ai/i/05452d3d0f044998822080362c439162"); /* Replace with local path if needed */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Glassmorphism for Containers */
+        [data-testid="stVerticalBlock"] > div:has(div.stMetric) {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        /* Fade-In Animation for Charts */
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .element-container {
+            animation: slideUpFade 1s ease-out;
+        }
+
+        /* Premium Sidebar */
+        [data-testid="stSidebar"] {
+            background-color: rgba(10, 10, 15, 0.8) !important;
+            backdrop-filter: blur(20px);
+        }
+
+        /* Metric Styling */
+        [data-testid="stMetricValue"] {
+            font-weight: 700;
+            color: #00FFC2 !important; /* Cyberpunk Green */
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+# Place this at the top of your app
+apply_crypto_premium_style()
+
+st.title("🚀 Real-Time Crypto Market Dashboard")
