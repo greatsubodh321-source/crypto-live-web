@@ -455,58 +455,66 @@ if auto_refresh and st.session_state.view_mode == 'dashboard':
         if refresh_interval >= 60:
             st.cache_data.clear()
         st.session_state.refresh_count = count
-import streamlit as st
+ import streamlit as st
+import base64
 
-def apply_crypto_premium_style():
+def apply_integrated_premium_style(image_path="crypto_bg.png"):
+    # Function to convert local image to base64 for CSS injection
+    def get_base64(bin_file):
+        with open(bin_file, 'rb') as f:
+            data = f.read()
+        return base64.b64encode(data).decode()
+
+    bin_str = get_base64(image_path)
+
     st.markdown(
-        """
+        f"""
         <style>
-        /* Main Background */
-        .stApp {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                        url("https://r.jina.ai/i/05452d3d0f044998822080362c439162"); /* Replace with local path if needed */
+        /* 1. Main Page Background with local image */
+        .stApp {{
+            background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), 
+                        url("data:image/png;base64,{bin_str}");
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-        }
+        }}
 
-        /* Glassmorphism for Containers */
-        [data-testid="stVerticalBlock"] > div:has(div.stMetric) {
-            background: rgba(255, 255, 255, 0.05);
+        /* 2. Glassmorphism for Property Parameters & Results Cards */
+        [data-testid="stSidebar"], .stMetric, .stVerticalBlock > div {{
+            background: rgba(255, 255, 255, 0.05) !important;
             backdrop-filter: blur(15px);
             border-radius: 15px;
-            padding: 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
+        }}
 
-        /* Fade-In Animation for Charts */
-        @keyframes slideUpFade {
-            0% { opacity: 0; transform: translateY(30px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
+        /* 3. Smooth Fade-In/Slide-Up Animation for content */
+        @keyframes slideUpFade {{
+            0% {{ opacity: 0; transform: translateY(30px); }}
+            100% {{ opacity: 1; transform: translateY(0); }}
+        }}
 
-        .element-container {
-            animation: slideUpFade 1s ease-out;
-        }
+        .main .block-container {{
+            animation: slideUpFade 1.2s ease-out;
+        }}
 
-        /* Premium Sidebar */
-        [data-testid="stSidebar"] {
-            background-color: rgba(10, 10, 15, 0.8) !important;
-            backdrop-filter: blur(20px);
-        }
+        /* 4. Highlighted 'Get Estimated Price' Button */
+        div.stButton > button:first-child {{
+            background: linear-gradient(45deg, #FF4B4B, #FF7E7E);
+            color: white;
+            border: none;
+            padding: 0.5rem 2rem;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 75, 75, 0.4);
+        }}
 
-        /* Metric Styling */
-        [data-testid="stMetricValue"] {
-            font-weight: 700;
-            color: #00FFC2 !important; /* Cyberpunk Green */
-        }
+        div.stButton > button:first-child:hover {{
+            transform: scale(1.05);
+        }}
         </style>
         """,
         unsafe_allow_html=True
     )
 
-# Place this at the top of your app
-apply_crypto_premium_style()
-
-st.title("🚀 Real-Time Crypto Market Dashboard")
+# 2. Call the function before any other Streamlit commands
+# Ensure 'crypto_bg.png' is in your project folder
+apply_integrated_premium_style("crypto_bg.png")
